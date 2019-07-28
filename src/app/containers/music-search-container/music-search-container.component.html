@@ -1,0 +1,20 @@
+<div nz-row [nzJustify]="'center'" [nzType]="'flex'">
+    <div nz-col [nzXl]="14">
+        <div nz-row [nzJustify]="'end'" [nzType]="'flex'" [nzGutter]="24">
+            <h1 nz-title="" class="ant-typography ng-star-inserted">Music Search</h1>
+        </div>
+    </div>
+</div>
+
+<div nz-row [nzJustify]="'center'" [nzType]="'flex'">
+	<div nz-col [nzXl]="14">
+		<div nz-row [nzJustify]="'center'" [nzType]="'flex'" [nzGutter]="24">
+			<app-card
+                *ngFor="let album of (albums$ | async)"
+                [album]="album"
+                nz-col
+                [nzSpan]="6"
+            ></app-card>
+		</div>
+	</div>
+</div>
