@@ -1,51 +1,58 @@
-import {Injectable} from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpEventType } from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {
+	HttpEvent,
+	HttpEventType,
+	HttpHandler,
+	HttpInterceptor,
+	HttpRequest
+} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { spotifyApi } from '../config/config';
 
 @Injectable({
-    providedIn: 'root'
+	providedIn: 'root'
 })
 export class AuthInterceptor implements HttpInterceptor {
+	public intercept(
+		req: HttpRequest<any>,
+		next: HttpHandler
+	): Observable<HttpEvent<HttpEventType.Response>> {
+		const token = this.getToken();
 
-    private authorize(): void {
-        localStorage.removeItem('token');
+		if (!token) {
+			return next.handle(req);
+		}
 
-        const clientId = '2787d1f8e189478a8f9411de5eacd25c';
-        const redirectUri = 'http://localhost:4300/';
-        const url = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${redirectUri}`;
+		const authReq = req.clone({
+			setHeaders: { Authorization: `Bearer ${token}` }
+		});
 
-        window.location.replace(url);
-    }
+		return next.handle(authReq);
+	}
 
-    private getToken(): string {
-        let token = localStorage.getItem('token');
+	private authorize(): void {
+		const { clientId, redirectUri } = spotifyApi;
+		const url = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${redirectUri}`;
 
-        if (!token) {
-            const match = window.location.hash.match(/#access_token=(.*?)&/);
+		localStorage.removeItem('token');
+		window.location.replace(url);
+	}
 
-            token = match && match[1];
+	private getToken(): string {
+		let token = localStorage.getItem('token');
 
-            localStorage.setItem('token', token);
-        }
+		if (!token) {
+			const match = window.location.hash.match(/#access_token=(.*?)&/);
 
-        if (!token) {
-            this.authorize();
-        }
+			token = match && match[1];
 
-        return token;
-    }
+			localStorage.setItem('token', token);
+		}
 
-    public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<HttpEventType.Response>> {
-        const token = this.getToken();
+		if (!token) {
+			this.authorize();
+		}
 
-        if (!token) {
-            return next.handle(req);
-        }
-
-        const authReq = req.clone({
-            setHeaders: { Authorization: `Bearer ${token}` }
-        });
-
-        return next.handle(authReq);
-    }
+		return token;
+	}
 }

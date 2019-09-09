@@ -1,11 +1,14 @@
-<nz-header >
+<nz-header class="header">
     <div class="logo">
         <img src="https://raw.githubusercontent.com/prasannavl/NetCoreEx/master/Misc/Logo.png">
     </div>
 
     <ul nz-menu nzTheme="dark" nzMode="horizontal">
-        <li nz-menu-item>Music Search</li>
-        <li nz-menu-item>Playlists</li>
+        <li nz-menu-item
+            *ngFor="let item of navList"
+            routerLink="{{ item.link }}"
+            routerLinkActive="ant-menu-item-selected active-link"
+        >{{ item.title }}</li>
     </ul>
 </nz-header>
 
