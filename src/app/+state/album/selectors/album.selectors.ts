@@ -5,11 +5,7 @@ const getAlbumState = createFeatureSelector<AlbumState>('album');
 
 const getTracks = createSelector(
 	getAlbumState,
-	(state: AlbumState) => {
-		// console.log('state');
-
-		return state.tracks;
-	}
+	(state: AlbumState) => state.tracks
 );
 
 const getImages = createSelector(

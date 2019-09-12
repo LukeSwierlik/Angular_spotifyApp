@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { Tracks } from '../../+state/album/album.interfaces';
+import { Item } from '../../+state/album/album.interfaces';
 import { AlbumState } from '../../+state/album/reducer/album.reducer';
 import { albumSelector } from '../../+state/album/selectors/album.selectors';
 
@@ -9,12 +8,22 @@ import { albumSelector } from '../../+state/album/selectors/album.selectors';
 	selector: 'app-album-details-container',
 	templateUrl: './album-details-container.component.html'
 })
-export class AlbumDetailsContainerComponent implements OnInit {
+export class AlbumDetailsContainerComponent {
 	public tracks$ = this.store.pipe(select(albumSelector.getTracks));
+	public images$ = this.store.pipe(select(albumSelector.getImages));
 
 	constructor(private store: Store<AlbumState>) {}
 
-	ngOnInit(): void {}
+	public addToPlaylist(item: any): void {}
 
-	edit(item: any): void {}
+	public play(audioRef: HTMLAudioElement, track: Item): void {
+		if (audioRef.src !== track.previewUrl) {
+			audioRef.src = track.previewUrl;
+			audioRef.play();
+		} else if (audioRef.paused) {
+			audioRef.play();
+		} else {
+			audioRef.pause();
+		}
+	}
 }

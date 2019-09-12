@@ -28,17 +28,17 @@ export interface Image {
 
 export interface Item {
 	artists: Artist[];
-	available_markets: string[];
-	disc_number: number;
-	duration_ms: number;
+	availableMarkets: string[];
+	discNumber: number;
+	durationMs: number;
 	explicit: boolean;
-	external_urls: ExternalUrls;
+	externalUrls: ExternalUrls;
 	href: string;
 	id: string;
-	is_local: boolean;
+	isLocal: boolean;
 	name: string;
-	preview_url: string;
-	track_number: number;
+	previewUrl: string;
+	trackNumber: number;
 	type: string;
 	uri: string;
 }
