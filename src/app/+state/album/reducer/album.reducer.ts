@@ -6,6 +6,8 @@ export interface AlbumState {
 	tracks: Tracks;
 	images: Image[];
 	artists: Artist[];
+	name: string;
+	label: string;
 	error: boolean;
 	loading: boolean;
 }
@@ -22,6 +24,8 @@ export const initialState: AlbumState = {
 	},
 	artists: [],
 	images: [],
+	name: '',
+	label: '',
 	error: false,
 	loading: false
 };
@@ -34,13 +38,10 @@ export const albumReducer = createReducer(
 	})),
 	on(successAlbum, (state, action) => {
 		console.log('payload', action.payload);
-		const { tracks, artists, images } = action.payload;
 
 		return {
 			...state,
-			tracks,
-			artists,
-			images,
+			...action.payload,
 			loading: false
 		};
 	})

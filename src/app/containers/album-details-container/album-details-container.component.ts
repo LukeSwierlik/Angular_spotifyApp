@@ -6,11 +6,11 @@ import { albumSelector } from '../../+state/album/selectors/album.selectors';
 
 @Component({
 	selector: 'app-album-details-container',
-	templateUrl: './album-details-container.component.html'
+	templateUrl: './album-details-container.component.html',
+	styleUrls: ['./album-details-container.component.scss']
 })
 export class AlbumDetailsContainerComponent {
-	public tracks$ = this.store.pipe(select(albumSelector.getTracks));
-	public images$ = this.store.pipe(select(albumSelector.getImages));
+	public album$ = this.store.pipe(select(albumSelector.getAlbum));
 
 	constructor(private store: Store<AlbumState>) {}
 

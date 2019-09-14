@@ -1,47 +1,59 @@
-<div nz-row [nzJustify]="'center'" [nzType]="'flex'">
-    <div nz-col [nzXl]="14">
-        <div nz-row [nzJustify]="'end'" [nzType]="'flex'" [nzGutter]="24">
-            <h1 nz-title="" class="ant-typography ng-star-inserted">Music Search</h1>
+<ng-template #loading>
+    <div nz-row [nzJustify]="'center'" [nzType]="'flex'">
+        <div nz-col [nzXl]="14">
+            <div nz-row [nzJustify]="'center'" [nzType]="'flex'" [nzGutter]="24">
+                <nz-spin nzSimple [nzSize]="'large'" ></nz-spin>
+            </div>
         </div>
     </div>
-</div>
-
-<div nz-row [nzJustify]="'center'" [nzType]="'flex'">
-    <div nz-col [nzXl]="14">
-        <form [formGroup]="searchForm">
-            <input nz-input
-                   placeholder="Search albums"
-                   type="text"
-                   formControlName="query"
-            />
-        </form>
-    </div>
-</div>
-
-<div nz-row [nzJustify]="'center'" [nzType]="'flex'">
-	<div nz-col [nzXl]="14">
-		<div nz-row [nzJustify]="'center'" [nzType]="'flex'" [nzGutter]="24"
-             *ngIf="(albums$ | async).length; else noResults">
-			<app-card
-                *ngFor="let album of (albums$ | async)"
-                [album]="album"
-                nz-col
-                [nzSpan]="6"
-                routerLink="../album/{{ album.id }}"
-            ></app-card>
-		</div>
-    </div>
-</div>
-
-<ng-template #noResults>
-    <div nz-row [nzJustify]="'center'" [nzType]="'flex'" [nzGutter]="24"
-         *ngIf="(albums$ | async).length === 0">
-        <nz-alert
-            nzType="info"
-            nzMessage="Informational Notes"
-            nzDescription="Additional description and informations about copywriting."
-            nzShowIcon
-        >
-        </nz-alert>
-    </div>
 </ng-template>
+
+<ng-container *ngIf="!(loading$ | async); else loading">
+    <div nz-row [nzJustify]="'center'" [nzType]="'flex'">
+        <div nz-col [nzXl]="14">
+            <div nz-row [nzJustify]="'end'" [nzType]="'flex'" [nzGutter]="24">
+                <h1 nz-title="" class="ant-typography ng-star-inserted">Music Search</h1>
+            </div>
+        </div>
+    </div>
+
+    <div nz-row [nzJustify]="'center'" [nzType]="'flex'">
+        <div nz-col [nzXl]="14">
+            <form [formGroup]="searchForm">
+                <input nz-input
+                       placeholder="Search albums"
+                       type="text"
+                       formControlName="query"
+                />
+            </form>
+        </div>
+    </div>
+
+    <div nz-row [nzJustify]="'center'" [nzType]="'flex'">
+        <div nz-col [nzXl]="14">
+            <div nz-row [nzJustify]="'center'" [nzType]="'flex'" [nzGutter]="24"
+                 *ngIf="(albums$ | async).length; else noResults">
+                <app-card
+                    *ngFor="let album of (albums$ | async)"
+                    [album]="album"
+                    nz-col
+                    [nzSpan]="6"
+                    routerLink="../album/{{ album.id }}"
+                ></app-card>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #noResults>
+        <div nz-row [nzJustify]="'center'" [nzType]="'flex'" [nzGutter]="24"
+             *ngIf="!(albums$ | async).length">
+            <nz-alert
+                nzType="info"
+                nzMessage="Informational Notes"
+                nzDescription="Additional description and informations about copywriting."
+                nzShowIcon
+            >
+            </nz-alert>
+        </div>
+    </ng-template>
+</ng-container>

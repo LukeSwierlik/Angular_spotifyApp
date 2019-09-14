@@ -16,10 +16,12 @@ export class AlbumService {
 
 		return this.httpClient.get<AlbumResponse>(url).pipe(
 			map(keysToCamel),
-			map(({ tracks, artists, images }) => ({
+			map(({ tracks, artists, images, name, label }) => ({
 				tracks,
 				artists,
-				images
+				images,
+				name,
+				label
 			}))
 		);
 	}

@@ -79,4 +79,6 @@ export interface AlbumPayload {
 	artists: Artist[];
 	images: Image[];
 	tracks: Tracks;
+	name: string;
+	label: string;
 }

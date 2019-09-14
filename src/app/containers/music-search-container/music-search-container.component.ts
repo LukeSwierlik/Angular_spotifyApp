@@ -20,6 +20,7 @@ export class MusicSearchContainerComponent implements OnInit {
 	public albums$: Observable<Album[]> = this.store.pipe(
 		select(musicSearchSelectors.getAllAlbums)
 	);
+	public loading$: Observable<boolean> = this.store.pipe(select(musicSearchSelectors.getLoading));
 
 	constructor(private store: Store<MusicSearchState>) {
 		this.searchForm = new FormGroup({

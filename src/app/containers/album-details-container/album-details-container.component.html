@@ -1,46 +1,70 @@
-<div nz-row [nzJustify]="'center'" [nzType]="'flex'">
-    <div nz-col [nzXl]="14">
-        <div nz-row [nzJustify]="'center'" [nzType]="'flex'" [nzGutter]="48">
-
-            <nz-card nzHoverable [ngStyle]="{'width': (images$ | async)[0]?.width + 'px' }" [nzCover]="coverTemplate">
-                <nz-card-meta nzTitle="Europe Street beat" nzDescription="www.instagram.com"></nz-card-meta>
-            </nz-card>
-
-            <ng-template #coverTemplate>
-                <img alt="example" src="{{ (images$ | async)[0]?.url }}" />
-            </ng-template>
-
-            <nz-list
-                class="demo-loadmore-list"
-                [nzDataSource]="(tracks$ | async)?.items"
-                [nzItemLayout]="'horizontal'"
-                [nzRenderItem]="item"
-            >
-                <audio #audio_id controls style="width:100%"></audio>
-
-                <ng-template #item let-item>
-                    <nz-list-item
-                        [nzActions]="item.loading ? [] : [editAction, moreAction]"
-                    >
-                        <nz-skeleton [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="item.loading">
-
-                            <ng-template #editAction><a (click)="play(audio_id, item)">play</a></ng-template>
-
-                            <ng-template #moreAction><a (click)="addToPlaylist(item)">add</a></ng-template>
-
-                            <nz-list-item-meta
-                                [nzTitle]="nzTitle"
-                                nzDescription="{{ item.name }}"
-                            >
-                                <ng-template #nzTitle>
-                                    <a href="https://ng.ant.design">{{ item.name.last }}</a>
-                                </ng-template>
-                            </nz-list-item-meta>
-                        </nz-skeleton>
-                    </nz-list-item>
-                </ng-template>
-            </nz-list>
-
+<ng-template #loading>
+    <div nz-row [nzJustify]="'center'" [nzType]="'flex'">
+        <div nz-col [nzXl]="14">
+            <div nz-row [nzJustify]="'center'" [nzType]="'flex'" [nzGutter]="24">
+                <nz-spin nzSimple [nzSize]="'large'" ></nz-spin>
+            </div>
         </div>
     </div>
-</div>
+</ng-template>
+
+<ng-container *ngIf="!(album$ | async)?.loading; else loading">
+    <div nz-row [nzJustify]="'center'" [nzType]="'flex'">
+        <div nz-col [nzXl]="14">
+            <div nz-row [nzJustify]="'end'" [nzType]="'flex'" [nzGutter]="24">
+                <h1 nz-title="" class="ant-typography ng-star-inserted">{{ (album$ | async)?.name }}</h1>
+            </div>
+        </div>
+    </div>
+
+    <div nz-row [nzJustify]="'center'" [nzType]="'flex'">
+        <div nz-col [nzXl]="14">
+            <div nz-row [nzJustify]="'center'" [nzType]="'flex'" [nzGutter]="48">
+
+                <div nz-col class="gutter-row" nzSpan="12">
+                    <nz-card nzHoverable [nzCover]="coverTemplate">
+                        <nz-card-meta nzTitle="{{ (album$ | async)?.name }}" nzDescription="{{ (album$ | async)?.label }}"></nz-card-meta>
+                    </nz-card>
+
+                    <ng-template #coverTemplate>
+                        <img alt="example" src="{{ (album$ | async)?.images[0]?.url }}" style="width: 100%"/>
+                    </ng-template>
+                </div>
+
+                <div nz-col class="gutter-row" nzSpan="12">
+                    <audio #audio_id controls style="width:100%"></audio>
+
+                    <nz-list
+                        class="demo-loadmore-list"
+                        [nzDataSource]="(album$ | async)?.tracks.items"
+                        [nzItemLayout]="'horizontal'"
+                        [nzRenderItem]="item"
+                    >
+                        <ng-template #item let-item>
+                            <nz-list-item
+                                [nzActions]="item.loading ? [] : [editAction, moreAction]"
+                            >
+                                <nz-skeleton [nzAvatar]="true" [nzActive]="true" [nzTitle]="false" [nzLoading]="item.loading">
+
+                                    <ng-template #editAction><a (click)="play(audio_id, item)"><i nz-icon nzType="caret-right" nzTheme="outline"></i></a></ng-template>
+
+                                    <ng-template #moreAction><a (click)="addToPlaylist(item)"><i nz-icon nzType="plus" nzTheme="outline"></i></a></ng-template>
+
+                                    <nz-list-item-meta
+                                        [nzTitle]="nzTitle"
+                                        nzDescription="{{ item.name }}"
+                                    >
+                                        <ng-template #nzTitle>
+                                            <a href="https://ng.ant.design">{{ item.name.last }}</a>
+                                        </ng-template>
+                                    </nz-list-item-meta>
+                                </nz-skeleton>
+                            </nz-list-item>
+                        </ng-template>
+                    </nz-list>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
